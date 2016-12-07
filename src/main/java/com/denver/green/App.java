@@ -5,11 +5,12 @@ package com.denver.green;
  *
  */
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class App {
 
-    static final Logger logger = Logger.getLogger(App.class);
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main( String[] args ) {
         System.out.println( "Hello World!" );
