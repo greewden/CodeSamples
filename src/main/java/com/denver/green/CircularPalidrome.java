@@ -13,17 +13,15 @@ public class CircularPalidrome {
     public static void main (String[] args) {
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
-        StringBuilder s = new StringBuilder(in.next());
+        String s = in.next();
         in.close();
         // Start timer
         System.out.println("Starting clock");
         long tStartNS = threadMXBean.getCurrentThreadCpuTime();
         for (int i = 0; i < n; i++) {
-            System.out.println(maxPalindromeLen(s));
-            // Rotate string one character
-            char t = s.charAt(0);
-            s.deleteCharAt(0);
-            s.append(t);
+            // Rotate string
+            String current = rotate(s, i);
+            System.out.println(maxPalindromeLen(current));
         }
         // End timer
         long tEndNS = threadMXBean.getCurrentThreadCpuTime();
@@ -66,8 +64,8 @@ public class CircularPalidrome {
         // return s.equals(reverse);
     }
 
-    public static int maxPalindromeLen(StringBuilder s) {
-        if (s == null || s.length() == 0) {
+    public static int maxPalindromeLen(String s) {
+        if (s == null || s == "") {
             return 0;
         }
         // Create a window that is initially as large as the input string.
