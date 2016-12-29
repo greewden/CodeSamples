@@ -15,16 +15,20 @@ public class CircularPalidrome {
         int n = in.nextInt();
         String s = in.next();
         in.close();
+        StringBuilder lengths = new StringBuilder(n * 2);
+
         // Start timer
         System.out.println("Starting clock");
         long tStartNS = threadMXBean.getCurrentThreadCpuTime();
         for (int i = 0; i < n; i++) {
             // Rotate string
             String current = rotate(s, i);
-            System.out.println(maxPalindromeLen(current));
+            lengths.append(maxPalindromeLen(current));
+            lengths.append("\n");
         }
         // End timer
         long tEndNS = threadMXBean.getCurrentThreadCpuTime();
+        System.out.println(lengths);
         System.out.println("Clock stopped");
         System.out.println(String.format("Total CPU time : %.6f sec", (float)(tEndNS - tStartNS) / 1.0e9));
     }
@@ -71,7 +75,7 @@ public class CircularPalidrome {
         // Create a window that is initially as large as the input string.
         int winSize = s.length();
         boolean foundPalindrome = false;
-        while (true) {
+        while (winSize > 1) {
             // Place window at start of string and slide it along the string
             // until a palindrome is found or the end of the string is reached.
             int start = 0;
@@ -89,5 +93,9 @@ public class CircularPalidrome {
             // Decrease window size as no palindrome was found that fit the window.
             winSize--;
         }
+
+        // If we get to this point then a palindrome was not found. Return 1 as any non - string will contain
+        // a one character palindrome.
+        return 1;
     }
 }
