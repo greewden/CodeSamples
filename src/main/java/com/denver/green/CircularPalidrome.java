@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Created by Denver on 12/25/2016.
  */
 public class CircularPalidrome {
-    public static ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+    private static ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 
     public static void main (String[] args) {
         Scanner in = new Scanner(System.in);
@@ -21,9 +21,9 @@ public class CircularPalidrome {
         System.out.println("Starting clock");
         long tStartNS = threadMXBean.getCurrentThreadCpuTime();
         for (int i = 0; i < n; i++) {
-            // Rotate string
+            // Rotate String
             String current = rotate(s, i);
-            lengths.append(maxPalindromeLen(current));
+            lengths.append(longestPalindrome(current));
             lengths.append("\n");
         }
         // End timer
@@ -34,68 +34,69 @@ public class CircularPalidrome {
     }
 
     /**
-     * Performs a k character rotation on the string s, by cutting the first k
+     * Performs a k character rotation on the String s, by cutting the first k
      * characters from the beginning of s and appending them to the end of s.
      * @param s - the String on which the rotation is to be done.
      * @param k - an integer representing the number of characters to rotate.
-     * @return rotated string.
+     * @return rotated String.
      */
-    public static String rotate(String s, int k) {
+    static String rotate(String s, int k) {
         if (k == 0) {
             return s;
         }
         k = k % s.length();
-        StringBuilder rotated = new StringBuilder(s.substring(k));
-        rotated.append(s.substring(0, k));
-        return rotated.toString();
+        return s.substring(k).concat(s.substring(0, k));
     }
 
     /**
-     * Determines if the supplied string is a palindrome, a string that reads
-     * the same from left to right as it does from right to left.
-     * @param s - string to check for being a palindrom
-     * @return true if string is a palindrome, false otherwise.
+     * Finds the length of the longest palindrome centered on the indexes c1 and c2. If c1 == c2
+     * then the palindromes found will be of odd length and if c1 != c2 then the palindromes found
+     * will be of even length.
+     * @param s - string to be searched
+     * @param c1 - index of the character to the immediate left of the center point.
+     * @param c2 - index of the character to the immediate right of the center point.
+     * @return an integer which represents the length of the longest palindrom found centered
+     *         on the point indicated.
      */
-    public static boolean isPalindrome(String s) {
-        for(int i = 0, j = s.length() - 1; i < j; i++, j--) {
-            if (s.charAt(i) != s.charAt(j)) {
-                return false;
+     static int expandAroundCenter(String s, int c1, int c2) {
+        if (s == null || s.equals("")) return 0;
+        int n = s.length();
+        if (n == 1) return 1;
+
+        int max = 0;
+
+        for (int left = c1, right = c2; left >= 0 && right < n; left--, right++) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return max;
             }
+            max += 2;
         }
-        return true;
-        // Create a reversed version of string s
-        // String reverse = new StringBuilder(s).reverse().toString();
-        // return s.equals(reverse);
+        return max;
     }
 
-    public static int maxPalindromeLen(String s) {
-        if (s == null || s == "") {
-            return 0;
-        }
-        // Create a window that is initially as large as the input string.
-        int winSize = s.length();
-        boolean foundPalindrome = false;
-        while (winSize > 1) {
-            // Place window at start of string and slide it along the string
-            // until a palindrome is found or the end of the string is reached.
-            int start = 0;
-            int end = winSize;
-            while (end <= s.length()) {
-                String subString = s.substring(start, end);
-                foundPalindrome = isPalindrome(subString);
-                if (foundPalindrome) {
-                   return winSize;
-                }
-                end++;
-                start++;
+    /**
+     * Finds the length of the longest palindrome in the string s.
+     * @param s - string to be searched.
+     * @return an integer representing the length of the longest palindrome found in the string s.
+     */
+    static int longestPalindrome(String s) {
+        int n = s.length();
+        if (s == null || n == 0) return 0;
+        int longest = 0;  // a single char itself is a palindrome
+        // Walk the center point used for finding palindromes along the string being searched.
+        for (int i = 0; i < n-1; i++) {
+            // Look for odd length palindromes centered on i.
+            int oddPalindrome = expandAroundCenter(s, i, i);
+            if (oddPalindrome > longest) {
+                longest = oddPalindrome - 1;
             }
 
-            // Decrease window size as no palindrome was found that fit the window.
-            winSize--;
+            // Look for even length palindromes centered in the gap between i and i+1
+            int evenPalindrome = expandAroundCenter(s, i, i+1);
+            if (evenPalindrome > longest) {
+                longest = evenPalindrome;
+            }
         }
-
-        // If we get to this point then a palindrome was not found. Return 1 as any non - string will contain
-        // a one character palindrome.
-        return 1;
+        return longest;
     }
 }

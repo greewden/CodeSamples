@@ -11,13 +11,13 @@ import static org.junit.Assert.*;
  */
 public class CircularPalidromeTest {
     @Test
-    public void isPalindrome() throws Exception {
+    public void expandAroundCenter() throws Exception {
         //TimeUnit.SECONDS.sleep(15);
         String s = "aaaaabbbbaaaaa";
-        assertTrue(CircularPalidrome.isPalindrome(s));
+        assertEquals(14, CircularPalidrome.expandAroundCenter(s, 6, 7));
 
         s = "kjlgjfmenkgllefleenmfiljjiffikeilkmgeneljhekllfhnlfimnmjljlhlljehmniejehfgknnihmhfenihnghgnjkhnfhifglhgenggknnmmjnnnfjmgehlkjkkemiekmlhgggingnjhfgkiejhhfkimenfjkhgfngkniigknlmnifnkiknnjmghmjfneemiikemllgemgmejfkgjinnlfkkjhekmejlleeliinmfeemigkfhlehglegjngelkeeeinhjgkkkllnmmkleekfkfemmeheklffhgimhfmhffnekgkfehkgelielljnkfijghmiimhjelmkgegjehfekfgkjlmekhkfkgfjjkekmjgikjhefgkjmkflhnfflfmjnjelngmgehhmhlgelkljfhhhjnheemfhekemhlkeejmhgljnimgjglfhkkgjkihiinfjmkngmijklhmejljgfglffnfjjjfmlnemhjjllneeihlijljnnlfmiilekeijginjjmjikfmnilmlhmnemijkfnfnjffekfmnnfggfffkfmfjljeknhjgnllhgneilfelekknfimnkhkhkigigjngffffkfeelmilkhjhfhjknfflgfjnkfkifjeifkgjnlgfefghgimfgjkhnnjfijkfgjmflnmihgkjlnljfjeigmjkemfhigekkkgliiemjjfgkhmjhjnniiglelkljmmihiinfkjjnnelfljlehnhehgfkhnmkelhlnjgiii";
-        assertFalse(CircularPalidrome.isPalindrome(s));
+        assertEquals(2, CircularPalidrome.expandAroundCenter(s, 0, 0));
     }
 
     @Test
@@ -39,13 +39,12 @@ public class CircularPalidromeTest {
     }
 
     @Test
-    public void maxPalindromeLen() throws Exception {
-        //TimeUnit.SECONDS.sleep(15);
+    public void longestPalindrom() throws Exception {
         String s = "kjlgjfmenkgllefleenmfiljjiffikeilkmgeneljhekllfhnlfimnmjljlhlljehmniejehfgknnihmhfenihnghgnjkhnfhifglhgenggknnmmjnnnfjmgehlkjkkemiekmlhgggingnjhfgkiejhhfkimenfjkhgfngkniigknlmnifnkiknnjmghmjfneemiikemllgemgmejfkgjinnlfkkjhekmejlleeliinmfeemigkfhlehglegjngelkeeeinhjgkkkllnmmkleekfkfemmeheklffhgimhfmhffnekgkfehkgelielljnkfijghmiimhjelmkgegjehfekfgkjlmekhkfkgfjjkekmjgikjhefgkjmkflhnfflfmjnjelngmgehhmhlgelkljfhhhjnheemfhekemhlkeejmhgljnimgjglfhkkgjkihiinfjmkngmijklhmejljgfglffnfjjjfmlnemhjjllneeihlijljnnlfmiilekeijginjjmjikfmnilmlhmnemijkfnfnjffekfmnnfggfffkfmfjljeknhjgnllhgneilfelekknfimnkhkhkigigjngffffkfeelmilkhjhfhjknfflgfjnkfkifjeifkgjnlgfefghgimfgjkhnnjfijkfgjmflnmihgkjlnljfjeigmjkemfhigekkkgliiemjjfgkhmjhjnniiglelkljmmihiinfkjjnnelfljlehnhehgfkhnmkelhlnjgiii";
-        int max = CircularPalidrome.maxPalindromeLen(s);
+        int max = CircularPalidrome.longestPalindrome(s);
         assertEquals(6, max);
 
-        max = CircularPalidrome.maxPalindromeLen(CircularPalidrome.rotate(s, 3));
+        max = CircularPalidrome.longestPalindrome(CircularPalidrome.rotate(s, 3));
         assertEquals(6, max);
 
     }
