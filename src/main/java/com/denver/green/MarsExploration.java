@@ -26,6 +26,9 @@ public class MarsExploration {
         int baseLen = base.length();
         int count = 0;
         for (int i = 0; i < message.length(); i++) {
+            // i % baseLen selects the appropriate character from the base to use
+            // in the comparision based on the current position we are at in the
+            // message.
             if (message.charAt(i) != base.charAt(i % baseLen)) {
                 count++;
             }
