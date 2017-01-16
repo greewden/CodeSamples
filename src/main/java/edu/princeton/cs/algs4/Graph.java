@@ -37,6 +37,8 @@ package edu.princeton.cs.algs4;
  ******************************************************************************/
 
 import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.Stack;
 
 /**
  *  The {@code Graph} class represents an undirected graph of vertices
@@ -84,7 +86,20 @@ public class Graph {
             adj[v] = new Bag<Integer>();
         }
     }
-
+    /**
+     * Initializes a graph using the specified Scanner.
+     * The format is the number of vertices <em>V</em>,
+     * followed by the number of edges <em>E</em>,
+     * followed by <em>E</em> pairs of vertices, with each entry separated by whitespace.
+     *
+     * @param  s the Scanner to read input from
+     * @throws IllegalArgumentException if the endpoints of any edge are not in prescribed range
+     * @throws IllegalArgumentException if the number of vertices or edges is negative
+     * @throws IllegalArgumentException if the input stream is in the wrong format
+     */
+    public Graph(Scanner s) {
+        this(new In(s));
+    }
     /**
      * Initializes a graph from the specified input stream.
      * The format is the number of vertices <em>V</em>,
@@ -138,17 +153,6 @@ public class Graph {
                 adj[v].add(w);
             }
         }
-    }
-
-    /**
-     * Unit tests the {@code Graph} data type.
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-        In in = new In(args[0]);
-        Graph G = new Graph(in);
-        StdOut.println(G);
     }
 
     /**
