@@ -15,5 +15,4 @@ public class EqualizeTheArrayTest {
 
         assertEquals(2, result);
     }
-
 }
