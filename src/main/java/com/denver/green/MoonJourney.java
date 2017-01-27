@@ -16,8 +16,9 @@ public class MoonJourney {
 
     public MoonJourney(Graph g) {
         this.g = g;
-        visited = new boolean[g.V()];
-        for (int i = 0; i < g.V(); i++) {
+        int numberOfVertices = g.V();
+        visited = new boolean[numberOfVertices];
+        for (int i = 0; i < numberOfVertices; i++) {
             visited[i] = false;
         }
     }
@@ -44,7 +45,7 @@ public class MoonJourney {
      * Once we have the total we need to subtract the number of ways you can choose astronauts from the
      * same country fo each country resulting in the formula.
      *
-     *       Ways = N choose 2 - (∑(Mi Choose 2) for i = 1 to M where M is the number of countries)
+     *     NumberOfWays = N choose 2 - (∑(Mi Choose 2) for i = 1 to M where M is the number of countries)
      *
      * @return number of possible pairs from different countries that can be made.
      */
@@ -52,6 +53,9 @@ public class MoonJourney {
         int totalAstronauts = g.V();
         long totalNumberOfWays = nChoose2(totalAstronauts);
 
+        // For each unvisited astronaut get the total number of astronauts that are from
+        // the same country as the unvisited astronaut. Mark all astronauts that are from
+        // the same country as visited so as to not calculate this total more than once.
         for (int astronaut = 0; astronaut < totalAstronauts; astronaut++) {
             // Go to next astronaut if this one was already visited
             if (visited[astronaut]) {
