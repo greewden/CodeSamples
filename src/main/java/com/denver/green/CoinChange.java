@@ -10,7 +10,7 @@ import java.util.Scanner;
  */
 public class CoinChange {
 
-    private int [][] storedSolns;
+    private long [][] storedSolns;
     private int [] denominations;
     private int amount;
 
@@ -18,11 +18,13 @@ public class CoinChange {
         this.denominations = denominations;
         this.amount = amount;
 
-        // Fill table used for remembering previous solutions with -1
+        // Fill table used for remembering previous solutions with -1 except for
+        // the first column which will be set to 1.
         // this is a 2 dimensional table with the first dimension representing
         // the amount to be changed and the second dimension representing
         // the number of distinct denominations available for making change.
-        this.storedSolns = new int[amount + 1] [denominations.length];
+        this.storedSolns = new long [amount + 1] [denominations.length + 1];
+        //Arrays.fill(storedSolns[0], 1);
         for (int i = 0; i <= amount; i++){
             Arrays.fill(storedSolns[i], -1);
         }
@@ -40,7 +42,7 @@ public class CoinChange {
         System.out.println(change.makeChange(availableDenominations, toChange));
     }
 
-    public int makeChange(int availDenom, int amtToChange) {
+    public long makeChange(int availDenom, int amtToChange) {
         // If amtToChange equals zero then there is only 1 solution which is no change.
         if (amtToChange == 0) {
             return 1;
@@ -58,24 +60,37 @@ public class CoinChange {
         }
 
         // Calculate the number of ways to make change. The number of ways is the sum of:
-        // 1) The number of ways to make change with a distinct denomination. (Soln includes the availDenom-1 coin)
-        //    first check to see if the answer is already stored in the storedSolns table, if not then recursively
-        //    calculate it.
-        int withDistinctDenom;
+        // 1) The number of ways to make change with a distinct denomination.
+        //    Soln includes the availDenom-1 coin from the denominations array.
+        //
+        //    First check to see if the answer is already stored in the storedSolns table, if not then recursively
+        //    calculate it by calling make change with availDenom unchanged and a new amount to make change for that
+        //    is the result of the old amount minus the denomination stored at index (availDenom - 1) in the
+        //    denominations array (we subtract 1 to account for array indexing starting at zero).
+        long withDistinctDenom;
         int newAmt = amtToChange - denominations[availDenom - 1];
-        if (newAmt >= 0 && storedSolns[newAmt][availDenom - 1] != -1) {
-            withDistinctDenom = storedSolns[newAmt][availDenom - 1];
+        if (newAmt < 0) {
+            withDistinctDenom = 0;
+        } else if (storedSolns[newAmt][availDenom] != -1) {
+            withDistinctDenom = storedSolns[newAmt][availDenom];
         } else {
             withDistinctDenom = makeChange(availDenom, newAmt);
         }
 
-        // 2) The number of wayts to make change without a distinct denomination. (Sol'n excludes the availDenom-1 coin)
-        int withoutDistinctDenom;
+        // 2) The number of wayts to make change without the denomination used in step 1.
+        //    (Sol'n excludes the availDenom-1 coin)
+        //
+        //    First check to see if the answer is already stored in the storedSolns table, if not then recursively
+        //    calculate it by calling make change with availDenom set to point to the denomination ahead of
+        //    the denomination used in step 1 and with the amount to change unmodified.
+        long withoutDistinctDenom;
         if (storedSolns[amtToChange][availDenom - 1] != -1) {
             withoutDistinctDenom = storedSolns[amtToChange][availDenom - 1];
         } else {
             withoutDistinctDenom = makeChange(availDenom - 1, amtToChange);
         }
-        return  withDistinctDenom + withoutDistinctDenom;
+
+        storedSolns[amtToChange][availDenom] = withDistinctDenom + withoutDistinctDenom;
+        return storedSolns[amtToChange][availDenom];
     }
 }
